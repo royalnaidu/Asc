@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Score Calculator</title>
+    <style>
+        /* Modern dark theme with colorful neon lights */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2), 0 0 40px rgba(255, 0, 255, 0.1);
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(0, 255, 255, 0.1), 0 0 20px rgba(255, 0, 255, 0.05); }
+            to { box-shadow: 0 0 30px rgba(0, 255, 255, 0.3), 0 0 50px rgba(255, 0, 255, 0.2); }
+        }
+
+        h1 {
+            text-align: center;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b0b0b0;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 10px #00ffff;
+            outline: none;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            outline: 2px solid transparent;
+            animation: button-glow 1.5s infinite alternate;
+        }
+
+        @keyframes button-glow {
+            from { box-shadow: 0 0 5px rgba(255, 255, 255, 0.1); }
+            to { box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
+        }
+
+        button:active {
+            transform: scale(0.95);
+            animation: none;
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+        }
+
+        #calculate {
+            background-color: #004d40;
+            color: #ffffff;
+            outline-color: #00ff00;
+        }
+
+        #reset {
+            background-color: #b71c1c;
+            color: #ffffff;
+            outline-color: #ff0000;
+        }
+
+        .result {
+            background-color: #252525;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .result p {
+            margin: 8px 0;
+            color: #d0d0d0;
+        }
+
+        .result .total {
+            font-size: 20px;
+            color: #00ff00;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        .share-section {
+            text-align: center;
+            margin-top: 20px;
+            color: #a0a0a0;
+        }
+
+        .share-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .share-button {
+            width: 80%;
+            max-width: 200px;
+        }
+
+        #facebook {
+            background-color: #1877f2;
+            color: #ffffff;
+            outline-color: #3b5998;
+        }
+
+        #whatsapp {
+            background-color: #25d366;
+            color: #ffffff;
+            outline-color: #128c7e;
+        }
+
+        /* Placeholder for social bar (e.g., sidebar or top bar for social icons) */
+        .social-bar {
+            position: fixed;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 10px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+        }
+
+        .social-bar a {
+            color: #e0e0e0;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+
+        .social-bar a:hover {
+            color: #00ffff;
+        }
+
+        /* Placeholder for native banner (e.g., ad banner at bottom) */
+        .native-banner {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.1);
+        }
+
+        .native-banner p {
+            margin: 0;
+        }
+
+        /* Mobile-friendly adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .social-bar {
+                position: static;
+                flex-direction: row;
+                justify-content: center;
+                margin-top: 20px;
+                padding: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admission Score Calculator</h1>
+
+        <div class="input-group">
+            <label for="ssc">SSC GPA (Out of 5.00)</label>
+            <input type="number" id="ssc" step="0.01" min="0" max="5" placeholder="e.g., 3.44">
+        </div>
+
+        <div class="input-group">
+            <label for="hsc">HSC GPA (Out of 5.00)</label>
+            <input type="number" id="hsc" step="0.01" min="0" max="5" placeholder="e.g., 3.58">
+        </div>
+
+        <div class="input-group">
+            <label for="mcq">MCQ Mark (Optional, Max 100)</label>
+            <input type="number" id="mcq" step="1" min="0" max="100" placeholder="e.g., 75">
+        </div>
+
+        <div class="buttons">
+            <button id="calculate">Calculate Result</button>
+            <button id="reset">Reset</button>
+        </div>
+
+        <div class="result" id="result">
+            <p>SSC Contribution (40%): <span id="ssc-contrib"></span></p>
+            <p>HSC Contribution (60%): <span id="hsc-contrib"></span></p>
+            <p>MCQ Score: <span id="mcq-score"></span></p>
+            <p class="total">Total Score (Out of 200): <span id="total-score"></span></p>
+        </div>
+
+        <div class="share-section">
+            Share this calculator
+            <div class="share-buttons">
+                <button class="share-button" id="facebook">Share on Facebook</button>
+                <button class="share-button" id="whatsapp">Share on WhatsApp</button>
+            </div>
+        </div>
+
+        <!-- Placeholder for native banner -->
+        <div class="native-banner">
+            <script type="text/javascript">
+  atOptions = {
+  	'key' : 'b27233a6a047f3bd148e6f3615eaa61c',
+  	'format' : 'iframe',
+  	'height' : 250,
+  	'width' : 300,
+  	'params' : {}
+  };
+</script>
+<script
+  type="text/javascript"
+  src="//www.highperformanceformat.com/b27233a6a047f3bd148e6f3615eaa61c/invoke.js"
+></script>
+<script type="text/javascript">
+  atOptions = {
+  	'key' : '9ab091daf7312bece1b8b3468545fd8b',
+  	'format' : 'iframe',
+  	'height' : 600,
+  	'width' : 160,
+  	'params' : {}
+  };
+</script>
+<script
+  type="text/javascript"
+  src="//www.highperformanceformat.com/9ab091daf7312bece1b8b3468545fd8b/invoke.js"
+></script>
+        </div>
+    </div>
+
+    <!-- Placeholder for social bar -->
+    <div class="social-bar">
+        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <!-- Add more social icons as needed -->
+    </div>
+
+    <script>
+        // Note: For social bar icons, assume Font Awesome is loaded externally or replace with text/emoji
+        // For simplicity, using text placeholders here. In real, link to CDN: <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+        const calculateBtn = document.getElementById('calculate');
+        const resetBtn = document.getElementById('reset');
+        const resultDiv = document.getElementById('result');
+        const sscInput = document.getElementById('ssc');
+        const hscInput = document.getElementById('hsc');
+        const mcqInput = document.getElementById('mcq');
+        const sscContrib = document.getElementById('ssc-contrib');
+        const hscContrib = document.getElementById('hsc-contrib');
+        const mcqScore = document.getElementById('mcq-score');
+        const totalScore = document.getElementById('total-score');
+
+        calculateBtn.addEventListener('click', () => {
+            const ssc = parseFloat(sscInput.value) || 0;
+            const hsc = parseFloat(hscInput.value) || 0;
+            const mcq = parseFloat(mcqInput.value) || 0;
+
+            if (ssc > 5 || hsc > 5 || mcq > 100) {
+                alert('Please enter valid values.');
+                return;
+            }
+
+            const sscContribution = ssc * 8; // 40% weight
+            const hscContribution = hsc * 12; // 60% weight
+            const total = sscContribution + hscContribution + mcq;
+
+            sscContrib.textContent = sscContribution.toFixed(2);
+            hscContrib.textContent = hscContribution.toFixed(2);
+            mcqScore.textContent = mcq.toFixed(2);
+            totalScore.textContent = total.toFixed(2);
+
+            resultDiv.style.display = 'block';
+        });
+
+        resetBtn.addEventListener('click', () => {
+            sscInput.value = '';
+            hscInput.value = '';
+            mcqInput.value = '';
+            resultDiv.style.display = 'none';
+        });
+
+        // Share functionality (basic, opens share links)
+        document.getElementById('facebook').addEventListener('click', () => {
+            window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank');
+        });
+
+        document.getElementById('whatsapp').addEventListener('click', () => {
+            window.open('https://wa.me/?text=' + encodeURIComponent('Check out this Admission Score Calculator: ' + window.location.href), '_blank');
+        });
+    </script>
+</body>
+</html>
